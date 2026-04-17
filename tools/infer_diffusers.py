@@ -59,11 +59,11 @@ def main():
         cond = batch["condition"].to(args.device)
 
         inference_eta = args.eta if args.scheduler == "ddim" else 0.0
-        sample = pipeline(condition=cond, num_inference_steps=args.steps, eta=inference_eta)
+        generated = pipeline(condition=cond, num_inference_steps=args.steps, eta=inference_eta)
 
-        for b in range(sample.shape[0]):
+        for b in range(generated.shape[0]):
             idx += 1
-            _to_image(sample[b]).save(out_dir / "sr_save" / f"{idx}_sr.png")
+            _to_image(generated[b]).save(out_dir / "sr_save" / f"{idx}_sr.png")
             _to_image(hr[b]).save(out_dir / "hr_save" / f"{idx}_hr.png")
             _to_image(cond[b]).save(out_dir / "lr_save" / f"{idx}_lr.png")
 
