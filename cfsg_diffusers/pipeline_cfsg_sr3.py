@@ -5,6 +5,12 @@ from diffusers import DDIMScheduler, DiffusionPipeline
 
 
 class CFSGCommunityPipeline(DiffusionPipeline):
+    """Conditional CFSG SR3 diffusion pipeline.
+
+    The pipeline denoises a random sample conditioned on a low-quality/label image
+    tensor and returns the generated super-resolved tensor in `[-1, 1]`.
+    """
+
     model_cpu_offload_seq = "unet"
 
     def __init__(self, unet, scheduler):
@@ -19,6 +25,17 @@ class CFSGCommunityPipeline(DiffusionPipeline):
         eta: float = 0.0,
         generator: Optional[torch.Generator] = None,
     ) -> torch.FloatTensor:
+        """Run conditional diffusion sampling.
+
+        Args:
+            condition: Condition tensor of shape `(B, 3, H, W)` in `[-1, 1]`.
+            num_inference_steps: Number of denoising steps.
+            eta: DDIM stochasticity parameter (used only with DDIM scheduler).
+            generator: Optional torch random generator for deterministic sampling.
+
+        Returns:
+            Generated tensor of shape `(B, 3, H, W)` in `[-1, 1]`.
+        """
         self.scheduler.set_timesteps(num_inference_steps, device=condition.device)
 
         sample = torch.randn(
