@@ -12,6 +12,8 @@ from cfsg_diffusers.config import load_json_with_comments
 from cfsg_diffusers.dataset import PairedImageDataset, make_dataset_pairs
 from cfsg_diffusers.modeling_legacy_sr3 import LegacySR3UNet
 
+RANDOM_CROP_DTYPES = {"random", "change", "crop", "multiple", "noise", "large_scale"}
+
 
 def _build_model_and_scheduler(opt):
     model_opt = opt["model"]
@@ -58,7 +60,7 @@ def main():
     ds = PairedImageDataset(
         pairs=pairs,
         image_size=train_opt["r_resolution"],
-        random_crop=train_opt["datatype"] in {"random", "change", "crop", "multiple", "noise", "large_scale"},
+        random_crop=train_opt["datatype"] in RANDOM_CROP_DTYPES,
     )
     loader = DataLoader(
         ds,

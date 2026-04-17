@@ -51,7 +51,7 @@ def main():
     (out_dir / "hr_save").mkdir(parents=True, exist_ok=True)
     (out_dir / "lr_save").mkdir(parents=True, exist_ok=True)
 
-    idx = 0
+    idx = -1
     for batch in tqdm(loader, desc="inference"):
         hr = batch["hr"].to(args.device)
         cond = batch["condition"].to(args.device)
