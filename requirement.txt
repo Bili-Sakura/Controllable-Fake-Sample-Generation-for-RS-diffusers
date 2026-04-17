@@ -11,3 +11,6 @@ argparse
 PIL
 scipy
 brisque
+diffusers>=0.30.0
+accelerate>=0.30.0
+safetensors

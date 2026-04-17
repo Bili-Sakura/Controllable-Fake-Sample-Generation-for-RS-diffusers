@@ -49,6 +49,19 @@ The diffusion model learns too slowly, and the general network starts from low f
 
 Our code is based on [**Image Super-Resolution via Iterative Refinement(SR3)**](https://github.com/Janspiry/Image-Super-Resolution-via-Iterative-Refinement ).We apply it to the remote sensing pseudo-sample generation task and increase our innovation.
 
+### Native diffusers workflow (new)
+
+The repository now includes a native `diffusers` style workflow:
+
+1. Optional editable source checkout:
+   - see `/external/diffusers/README.md`
+2. Convert legacy checkpoints:
+   - `python tools/convert_legacy_checkpoint_to_diffusers.py --config config/infer_256.json --legacy_checkpoint /path/to/Ixxxx_Exxxx_gen.pth --output_dir /path/to/diffusers_ckpt`
+3. Train with diffusers:
+   - `python tools/train_diffusers.py --config config/new_leader.json --output_dir ./diffusers_outputs`
+4. Inference with diffusers:
+   - `python tools/infer_diffusers.py --config config/infer_256.json --model_dir ./diffusers_outputs/step-10000 --output_dir ./diffusers_infer --steps 20 --eta 0.0`
+
 ### Environment
 
 ```python
