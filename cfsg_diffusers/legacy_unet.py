@@ -29,7 +29,6 @@ class PositionalEncoding(nn.Module):
             1) * torch.exp(-math.log(1e4) * step.unsqueeze(0))
         encoding = torch.cat(
             [torch.sin(encoding), torch.cos(encoding)], dim=-1)
-        #print("encoding:",encoding.shape)
         return encoding
 
 
@@ -234,7 +233,6 @@ class UNet(nn.Module):
 
         self.final_conv = Block(pre_channel, default(out_channel, in_channel), groups=norm_groups)
     def forward(self, x, time):
-        # a = time.time()
         t = self.noise_level_mlp(time) if exists(
             self.noise_level_mlp) else None
 
@@ -257,16 +255,6 @@ class UNet(nn.Module):
                 x = layer(torch.cat((x, feats.pop()), dim=1), t)
             else:
                 x = layer(x)
-        # b = time.time()
-        # c = b-a
-        #print("Unet运行所需:",c)
-        # self.time_sum = self.time_sum + c
-        # self.forward_count = self.forward_count + 1
-        # if(self.forward_count % 200 == 0):
-        #     shape = x.shape
-        #     print(shape,self.forward_count,"次所需时间:",self.time_sum)
-
-
         return self.final_conv(x)
 
 def weights_init_orthogonal(m):
@@ -293,7 +281,6 @@ if __name__=="__main__":
     t = t.to(device)
     model.to(device)
     print(model)
-    #t = t.to(device)
     begin = time.time()
     for i in range(5000):
         x_ = model(x, t)

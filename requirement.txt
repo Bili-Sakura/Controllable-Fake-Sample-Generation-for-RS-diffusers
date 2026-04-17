@@ -7,7 +7,6 @@ opencv-python
 pillow
 tensorboardx
 wandb
-argparse
 scipy
 brisque
 diffusers>=0.30.0
