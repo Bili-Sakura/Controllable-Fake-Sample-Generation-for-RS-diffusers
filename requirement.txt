@@ -8,7 +8,6 @@ pillow
 tensorboardx
 wandb
 argparse
-PIL
 scipy
 brisque
 diffusers>=0.30.0

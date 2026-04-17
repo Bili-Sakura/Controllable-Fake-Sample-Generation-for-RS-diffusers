@@ -1,6 +1,6 @@
 import math
 import torch
-import time as Date
+import time
 from torch import nn
 from collections import OrderedDict
 import torch.nn.functional as F
@@ -16,7 +16,7 @@ def default(val, d):
         return val
     return d() if isfunction(d) else d
 
-# PositionalEncoding Source： https://github.com/lmnt-com/wavegrad/blob/master/src/wavegrad/model.py
+# PositionalEncoding Source: https://github.com/lmnt-com/wavegrad/blob/master/src/wavegrad/model.py
 class PositionalEncoding(nn.Module):
     def __init__(self, dim):
         super().__init__()
@@ -238,7 +238,7 @@ class UNet(nn.Module):
         self.forward_count = 0
 
     def forward(self, x, time):
-        # a = Date.time()
+        # a = time.time()
         t = self.noise_level_mlp(time) if exists(
             self.noise_level_mlp) else None
 
@@ -261,7 +261,7 @@ class UNet(nn.Module):
                 x = layer(torch.cat((x, feats.pop()), dim=1), t)
             else:
                 x = layer(x)
-        # b = Date.time()
+        # b = time.time()
         # c = b-a
         #print("Unet运行所需:",c)
         # self.time_sum = self.time_sum + c
@@ -297,10 +297,10 @@ if __name__=="__main__":
     model.to(device)
     print(model)
     #t = t.to(device)
-    begin = Date.time()
+    begin = time.time()
     for i in range(5000):
         x_ = model(x, t)
         if (i+1) % 500 == 0:
-            end = Date.time()
+            end = time.time()
             print(i+1,"次所需时间:",end - begin)
     print(x.shape)

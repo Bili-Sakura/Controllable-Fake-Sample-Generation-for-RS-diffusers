@@ -68,7 +68,7 @@ def main():
             idx += 1
             _to_image(sample[b]).save(out_dir / "sr_save" / f"{idx}_sr.png")
             _to_image(hr[b]).save(out_dir / "hr_save" / f"{idx}_hr.png")
-            _to_image(cond[b]).save(out_dir / "lr_save" / f"{idx}_inf.png")
+            _to_image(cond[b]).save(out_dir / "lr_save" / f"{idx}_lr.png")
 
 
 if __name__ == "__main__":
