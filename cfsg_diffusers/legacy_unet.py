@@ -1,6 +1,5 @@
 import math
 import torch
-import time
 from torch import nn
 from collections import OrderedDict
 import torch.nn.functional as F
@@ -284,6 +283,7 @@ def weights_init_orthogonal(m):
         init.constant_(m.weight.data, 1.0)
         init.constant_(m.bias.data, 0.0)
 if __name__=="__main__":
+    import time
     model = UNet()
     model.apply(weights_init_orthogonal)
     device = torch.device('cuda:0' if torch.cuda.is_available() else "cpu")
