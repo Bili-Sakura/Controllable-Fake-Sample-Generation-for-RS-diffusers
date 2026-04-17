@@ -232,6 +232,7 @@ class UNet(nn.Module):
         self.ups = nn.ModuleList(ups)
 
         self.final_conv = Block(pre_channel, default(out_channel, in_channel), groups=norm_groups)
+
     def forward(self, x, time):
         t = self.noise_level_mlp(time) if exists(
             self.noise_level_mlp) else None
@@ -270,7 +271,7 @@ def weights_init_orthogonal(m):
     elif classname.find('BatchNorm2d') != -1:
         init.constant_(m.weight.data, 1.0)
         init.constant_(m.bias.data, 0.0)
-if __name__=="__main__":
+if __name__ == "__main__":
     import time
     model = UNet()
     model.apply(weights_init_orthogonal)
