@@ -1,5 +1,6 @@
 """CFSG diffusers-native components."""
 
-from .modeling_legacy_sr3 import LegacySR3UNet
+from .modeling_community_sr3 import CFSGCommunityUNet
+from .pipeline_cfsg_sr3 import CFSGCommunityPipeline
 
-__all__ = ["LegacySR3UNet"]
+__all__ = ["CFSGCommunityUNet", "CFSGCommunityPipeline"]

@@ -10,7 +10,8 @@ from tqdm import tqdm
 
 from cfsg_diffusers.config import load_json_with_comments
 from cfsg_diffusers.dataset import PairedImageDataset, make_dataset_pairs
-from cfsg_diffusers.modeling_legacy_sr3 import LegacySR3UNet
+from cfsg_diffusers.modeling_community_sr3 import CFSGCommunityUNet
+from cfsg_diffusers.pipeline_cfsg_sr3 import CFSGCommunityPipeline
 
 
 def _to_image(tensor: torch.Tensor) -> Image.Image:
@@ -37,14 +38,15 @@ def main():
     ds = PairedImageDataset(pairs=pairs, image_size=val_opt["r_resolution"], random_crop=False)
     loader = DataLoader(ds, batch_size=args.batch_size, shuffle=False)
 
-    model = LegacySR3UNet.from_pretrained(Path(args.model_dir) / "unet").to(args.device)
+    model = CFSGCommunityUNet.from_pretrained(Path(args.model_dir) / "unet")
     model.eval()
 
     if args.scheduler == "ddim":
         scheduler = DDIMScheduler.from_pretrained(Path(args.model_dir) / "scheduler")
     else:
         scheduler = DDPMScheduler.from_pretrained(Path(args.model_dir) / "scheduler")
-    scheduler.set_timesteps(args.steps)
+    pipeline = CFSGCommunityPipeline(unet=model, scheduler=scheduler)
+    pipeline = pipeline.to(args.device)
 
     out_dir = Path(args.output_dir)
     (out_dir / "sr_save").mkdir(parents=True, exist_ok=True)
@@ -56,13 +58,7 @@ def main():
         hr = batch["hr"].to(args.device)
         cond = batch["condition"].to(args.device)
 
-        sample = torch.randn_like(hr)
-        for t in scheduler.timesteps:
-            t_batch = torch.full((sample.shape[0],), int(t), device=sample.device, dtype=torch.long)
-            model_input = torch.cat([cond, sample], dim=1)
-            noise_pred = model(model_input, t_batch).sample
-            step_kwargs = {"eta": args.eta} if isinstance(scheduler, DDIMScheduler) else {}
-            sample = scheduler.step(noise_pred, t, sample, **step_kwargs).prev_sample
+        sample = pipeline(condition=cond, num_inference_steps=args.steps, eta=args.eta)
 
         for b in range(sample.shape[0]):
             idx += 1

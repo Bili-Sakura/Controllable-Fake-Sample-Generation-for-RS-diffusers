@@ -5,7 +5,7 @@ import torch
 from diffusers import DDPMScheduler
 
 from cfsg_diffusers.config import load_json_with_comments
-from cfsg_diffusers.modeling_legacy_sr3 import LegacySR3UNet
+from cfsg_diffusers.modeling_community_sr3 import CFSGCommunityUNet
 
 
 def _strip_prefix(state_dict):
@@ -34,7 +34,7 @@ def main():
     unet_opt = model_opt["unet"]
     schedule_opt = model_opt["beta_schedule"]["train"]
 
-    model = LegacySR3UNet(
+    model = CFSGCommunityUNet(
         in_channel=unet_opt["in_channel"],
         out_channel=unet_opt["out_channel"],
         inner_channel=unet_opt["inner_channel"],

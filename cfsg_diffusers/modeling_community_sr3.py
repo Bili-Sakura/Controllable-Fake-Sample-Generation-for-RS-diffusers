@@ -6,7 +6,7 @@ from diffusers.configuration_utils import ConfigMixin, register_to_config
 from diffusers.models.modeling_utils import ModelMixin
 from diffusers.utils import BaseOutput
 
-from cfsg_diffusers.legacy_unet import UNet as LegacyUNet
+from cfsg_diffusers.community_unet import UNet as CommunityUNet
 
 
 @dataclass
@@ -14,7 +14,7 @@ class SR3UNetOutput(BaseOutput):
     sample: torch.FloatTensor
 
 
-class LegacySR3UNet(ModelMixin, ConfigMixin):
+class CFSGCommunityUNet(ModelMixin, ConfigMixin):
     @register_to_config
     def __init__(
         self,
@@ -31,7 +31,7 @@ class LegacySR3UNet(ModelMixin, ConfigMixin):
     ):
         super().__init__()
         self.num_train_timesteps = num_train_timesteps
-        self.backbone = LegacyUNet(
+        self.backbone = CommunityUNet(
             in_channel=in_channel,
             out_channel=out_channel,
             inner_channel=inner_channel,

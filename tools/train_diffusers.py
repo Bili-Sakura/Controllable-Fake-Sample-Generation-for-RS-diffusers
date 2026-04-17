@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 from cfsg_diffusers.config import load_json_with_comments
 from cfsg_diffusers.dataset import PairedImageDataset, make_dataset_pairs
-from cfsg_diffusers.modeling_legacy_sr3 import LegacySR3UNet
+from cfsg_diffusers.modeling_community_sr3 import CFSGCommunityUNet
 
 RANDOM_CROP_DTYPES = {"random", "change", "crop", "multiple", "noise", "large_scale"}
 
@@ -20,7 +20,7 @@ def _build_model_and_scheduler(opt):
     unet_opt = model_opt["unet"]
     schedule_opt = model_opt["beta_schedule"]["train"]
 
-    model = LegacySR3UNet(
+    model = CFSGCommunityUNet(
         in_channel=unet_opt["in_channel"],
         out_channel=unet_opt["out_channel"],
         inner_channel=unet_opt["inner_channel"],
