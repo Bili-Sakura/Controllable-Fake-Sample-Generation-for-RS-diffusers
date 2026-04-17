@@ -38,7 +38,7 @@ def main():
     ds = PairedImageDataset(pairs=pairs, image_size=val_opt["r_resolution"], random_crop=False)
     loader = DataLoader(ds, batch_size=args.batch_size, shuffle=False)
 
-    model = CFSGCommunityUNet.from_pretrained(Path(args.model_dir) / "unet")
+    model = CFSGCommunityUNet.from_pretrained(Path(args.model_dir) / "unet").to(args.device)
     model.eval()
 
     if args.scheduler == "ddim":
@@ -58,7 +58,8 @@ def main():
         hr = batch["hr"].to(args.device)
         cond = batch["condition"].to(args.device)
 
-        sample = pipeline(condition=cond, num_inference_steps=args.steps, eta=args.eta)
+        inference_eta = args.eta if args.scheduler == "ddim" else 0.0
+        sample = pipeline(condition=cond, num_inference_steps=args.steps, eta=inference_eta)
 
         for b in range(sample.shape[0]):
             idx += 1

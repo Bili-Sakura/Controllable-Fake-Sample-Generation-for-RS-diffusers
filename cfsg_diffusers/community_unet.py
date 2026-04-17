@@ -287,5 +287,5 @@ if __name__ == "__main__":
         x_ = model(x, t)
         if (i+1) % 500 == 0:
             end = time.time()
-            print(i+1,"次所需时间:",end - begin)
+            print(i + 1, "elapsed time:", end - begin)
     print(x.shape)
