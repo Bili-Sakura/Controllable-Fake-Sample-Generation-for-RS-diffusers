@@ -234,9 +234,6 @@ class UNet(nn.Module):
         self.ups = nn.ModuleList(ups)
 
         self.final_conv = Block(pre_channel, default(out_channel, in_channel), groups=norm_groups)
-        self.time_sum = 0.0
-        self.forward_count = 0
-
     def forward(self, x, time):
         # a = time.time()
         t = self.noise_level_mlp(time) if exists(
